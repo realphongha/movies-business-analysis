@@ -4,12 +4,14 @@ from bs4 import BeautifulSoup
 from utils import *
 from multiprocessing.pool import ThreadPool
 
+
 BASE_LINK = "https://www.imdb.com/search/title/?title_type=feature&user_rating=1.0,10.0&countries=us&adult=include&sort=release_date,desc&count=250"
 URL_PREFIX = "https://www.imdb.com"
 LIMIT = 20000
 OUTPUT_FILE = "output/imdb.json"
 SAVE_FREQ = 10
 PROCESSES = 10
+MIN_RATING_COUNT = 1000
 
 
 counter = None
@@ -29,19 +31,20 @@ def save_to_file():
 
 class IMDBMovie:
 
-    def __init__(self, title=None, rating=None, date=None, genre=None, actor=None, director=None, duration=None,
-                 rating_count=None, content_rating=None, oscar=None, metascore=None):
-        self.title = title
-        self.rating = rating
-        self.date = date
-        self.genre = genre
-        self.actor = actor
-        self.director = director
-        self.duration = duration
-        self.rating_count = rating_count
-        self.content_rating = content_rating
-        self.oscar = oscar
-        self.metascore = metascore
+    def __init__(self):
+        self.title = None
+        self.rating = None
+        self.date = None
+        self.genre = None
+        self.actor = None
+        self.director = None
+        self.creator = None
+        self.duration = None
+        self.rating_count = None
+        self.content_rating = None
+        self.oscar = None
+        self.metascore = None
+        self.url = None
 
     def to_json(self):
         return {"title": self.title,
@@ -50,11 +53,13 @@ class IMDBMovie:
                 "genre": self.genre,
                 "actor": self.actor,
                 "director": self.director,
+                "creator": self.creator,
                 "duration": self.duration,
                 "rating_count": self.rating_count,
                 "content_rating": self.content_rating,
                 "oscar": self.oscar,
-                "metascore": self.metascore}
+                "metascore": self.metascore,
+                "url": self.url}
 
 
 def crawl_movie(args):
@@ -78,18 +83,25 @@ def crawl_movie(args):
         print("Type error!")
         return
     try:
+        movie.title = info["name"]
         movie.genre = info["genre"]
         movie.actor = info["actor"]
         movie.director = info["director"]
+        movie.creator = info["creator"]
         movie.duration = info["duration"]
     except KeyError as e:
         print(e)
         return
     try:
         movie.rating_count = info["aggregateRating"]["ratingCount"]
+        if int(movie.rating_count) < MIN_RATING_COUNT:
+            return
     except KeyError:
-        pass
+        return
+    except ValueError:
+        return
     movie.content_rating = info.get("contentRating", None)
+    movie.url = info.get("url", None)
     movie.date = info.get("datePublished", None)
     awards = soup.select("div#titleAwardsRanks span.awards-blurb b")
     for award in awards:
