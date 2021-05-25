@@ -1,0 +1,162 @@
+.carouse {
+    height: 600px;
+    overflow: hidden;
+    position: relative;
+}
+
+.carouse .slide {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+    display: none;
+    padding: 0 15px;
+    animation: slide 2s ease;
+}
+
+.carouse .slide.active {
+    display: flex;
+}
+
+@keyframes slide {
+    0% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.container {
+    max-width: 1170px;
+    margin: auto;
+}
+
+.carouse .container {
+    flex-grow: 1;
+}
+
+.carouse .caption {
+    width: 50%;
+}
+
+.carouse .caption h1 {
+    font-size: 42px;
+    color: #000000;
+    margin: 0;
+}
+
+.carouse .slide.active .caption h1 {
+    opacity: 0;
+    animation: captionText .5s ease forwards;
+    animation-delay: 1s;
+}
+
+.carouse .caption p {
+    font-size: 18px;
+    margin: 15px 0 30px;
+    color: #222222;
+}
+
+.carouse .slide.active .caption p {
+    opacity: 0;
+    animation: captionText .5s ease forwards;
+    animation-delay: 1.2s;
+}
+
+.carouse .caption a {
+    display: inline-block;
+    padding: 10px 30px;
+    background-color: #000000;
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.carouse .slide.active .caption a {
+    opacity: 0;
+    animation: captionText .5s ease forwards;
+    animation-delay: 1.4s;
+}
+
+@keyframes captionText {
+    0% {
+        opacity: 0;
+        transform: translateX(-100px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(50px);
+    }
+}
+
+.carouse .controls .prev,
+.carouse .controls .next {
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    height: 40px;
+    width: 40px;
+    margin-top: -20px;
+    color: #000000;
+    text-align: center;
+    line-height: 40px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all .5s ease;
+}
+
+.carouse .controls .prev:hover,
+.carouse .controls .next:hover {
+    background-color: #ffffff;
+}
+
+.carouse .controls .prev {
+    left: 0;
+}
+
+.carouse .controls .next {
+    right: 0;
+}
+
+.carouse .indicator {
+    position: absolute;
+    left: 50%;
+    bottom: 30px;
+    z-index: 2;
+    transform: translateX(-50%);
+}
+
+.carouse .indicator div {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    color: #ffffff;
+    background-color: #a0a0a0;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 25px;
+    margin: 0 3px;
+}
+
+.carouse .indicator div.active {
+    background-color: #464646;
+}
+
+
+/*responsive*/
+
+@media(max-width: 767px) {
+    .controls {
+        display: none;
+    }
+}
+
+.carouse2 {
+    height: 500px;
+    align-items: center;
+    justify-content: center;
+}

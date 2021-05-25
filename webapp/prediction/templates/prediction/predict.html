@@ -1,0 +1,28 @@
+{% extends "prediction/base.html" %}
+
+{% block title %} IMDb rating prediction {% endblock %}
+
+{% block content %}
+<div class="modal-header">
+    <h5 class="modal-title">IMDb Rating Prediction</h5>
+</div>
+
+<div class="modal-body">
+    {% if rating %}
+    <h6>Detected actors: {{actors}}</h6>
+    <h6>Detected directors: {{directors}}</h6>
+    <h6>Detected creators: {{creators}}</h6>
+    <h6>Detected organizations: {{organizations}}</h6>
+    <h5 style="color: blue;">Your predicted movie IMDb rating: <a style="color: red;">{{rating}}</a></h6>
+    {% else %}
+    <h5>Enter some information about your movie to predict its IMDb rating</h5>
+    {% endif %}
+    <form method="post" class="normal-form">
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+        </table>
+        <button class="btn btn-success" type="submit">Predict!</button>
+    </form>
+</div>
+{% endblock %}
