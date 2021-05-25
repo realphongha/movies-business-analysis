@@ -15,5 +15,7 @@ a demo webapp to present our experimental results.
 # Movies business analysis and deep learning model in movies_business_analysis.ipynb
 
 # Deploy demo webapp:
+First download checkpoint and dictionaries (tutorial can be found in webapp/prediction/model_checkpoint)   
+Then   
 ```cd webapp```   
 ```python manage.py runserver```
