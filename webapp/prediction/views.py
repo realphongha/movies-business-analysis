@@ -1,4 +1,5 @@
 import datetime
+import gc
 from django.shortcuts import render
 from .forms import *
 from .preprocess import *
@@ -33,9 +34,17 @@ def predict(request):
             data = preprocess(date, duration, budget, actors, directors, creators, organizations,
                               genres, content_ratings)
 
+
             model = get_model(data.shape[1])
+
+            # avoids memory leak
+            data = tf.convert_to_tensor(data, dtype=tf.float32)
+            gc.collect()
+            tf.keras.backend.clear_session()
+
             result = model.predict(data)
             rating = round(result[0][0], 1)
+
             return render(request, 'prediction/predict.html', {'form': form,
                     'rating': rating, 'actors': ", ".join(actors), 
                     'directors': ", ".join(directors),
