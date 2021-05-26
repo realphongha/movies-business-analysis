@@ -48,20 +48,22 @@ def split_str(strings):
     return list(map(lambda x: x.strip().lower(), strings.split(";")))
 
 
-def preprocess(date, duration, budget, actors, directors, creators, organizations, content_ratings):
+def preprocess(date, duration, budget, actors, directors, creators, organizations, genres, content_ratings):
     data_test = []
     actors_test = []
     content_ratings_test = []
     directors_test = []
     creators_test = []
     organizations_test = []
+    genres_test = []
 
     actors_test.append(actors)
     content_ratings_test.append(content_ratings)
     directors_test.append(directors)
     creators_test.append(creators)
     organizations_test.append(organizations)
-    data_test.append([date.day, date.month, date.year - YEAR_LIMIT, duration, budget])
+    genres_test.append(genres)
+    data_test.append([date.day, date.month, duration, budget])
 
     with open(DICT_PATH, "rb") as file:
         enc = pickle.load(file)
@@ -71,13 +73,14 @@ def preprocess(date, duration, budget, actors, directors, creators, organization
     directors_test = enc[2].encode(directors_test)
     creators_test = enc[3].encode(creators_test)
     organizations_test = enc[4].encode(organizations_test)
+    genres_test = enc[5].encode(genres_test)
 
-    for i in range(len(data_test)):
-        data_test[i].extend(list(actors_test[i]))
-        data_test[i].extend(list(content_ratings_test[i]))
-        data_test[i].extend(list(directors_test[i]))
-        data_test[i].extend(list(creators_test[i]))
-        data_test[i].extend(list(organizations_test[i]))
+    data_test[0].extend(list(actors_test[0]))
+    data_test[0].extend(list(content_ratings_test[0]))
+    data_test[0].extend(list(directors_test[0]))
+    data_test[0].extend(list(creators_test[0]))
+    data_test[0].extend(list(organizations_test[0]))
+    data_test[0].extend(list(genres_test[0]))
 
     data_test = np.asarray(data_test).astype(np.float64)
 

@@ -14,4 +14,5 @@ class PredictionForm(Form):
     directors = CharField(label="Directors (separated by ';')", max_length=200, required=True)
     creators = CharField(label="Creators (separated by ';')", max_length=200, required=True)
     organizations = CharField(label="Organizations (separated by ';')", max_length=200, required=True)
-    content_ratings = ChoiceField(choices=CONTENT_RATINGS_CHOICES, required=True)
+    genres = MultipleChoiceField(label="Genres", choices=GENRES_CHOICES, required=True)
+    content_ratings = ChoiceField(label="Content rating", choices=CONTENT_RATINGS_CHOICES, required=True)

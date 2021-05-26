@@ -13,3 +13,4 @@ GENRES, CONTENT_RATINGS, ACTORS, DIRECTORS, CREATORS, ORGANIZATIONS = \
     pickle.load(open("prediction/model_checkpoint/categories.pkl", "rb"))
 
 CONTENT_RATINGS_CHOICES = [(x, x) for x in CONTENT_RATINGS]
+GENRES_CHOICES = [(x, x) for x in sorted(GENRES)]

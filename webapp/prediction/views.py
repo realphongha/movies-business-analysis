@@ -12,14 +12,13 @@ def predict(request):
         form = PredictionForm(request.POST)
         if form.is_valid():
             date = form.cleaned_data["release_date"]
-            if date.year < YEAR_LIMIT:
-                pass
             duration = form.cleaned_data["duration"]
             budget = form.cleaned_data["budget"]
             actors = split_str(form.cleaned_data["actors"])
             directors = split_str(form.cleaned_data["directors"])
             creators = split_str(form.cleaned_data["creators"])
             organizations = split_str(form.cleaned_data["organizations"])
+            genres = [x.lower() for x in form.cleaned_data["genres"]]
             content_ratings = form.cleaned_data["content_ratings"].strip().lower()
             actors = [get_best_result(ACTORS, x) for x in actors]
             directors = [get_best_result(DIRECTORS, x) for x in directors]
@@ -31,7 +30,8 @@ def predict(request):
             creators = [x for x in creators if x]
             organizations = [x for x in organizations if x]
 
-            data = preprocess(date, duration, budget, actors, directors, creators, organizations, content_ratings)
+            data = preprocess(date, duration, budget, actors, directors, creators, organizations,
+                              genres, content_ratings)
 
             model = get_model(data.shape[1])
             result = model.predict(data)
